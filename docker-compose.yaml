@@ -24,12 +24,20 @@ services:
           aliases:
           - searchservice
   elasticsearch:
-      container_name: elastic_searchservice
-      image: elasticsearch:6.4.0 
+      container_name: elasticsearch
+      image: elasticsearch:7.17.5
       networks:
         bridge:
           aliases:
-          - elastic_searchservice
+          - elastic
+      ports:
+          - 9200:9200
+          - 9300:9300
+      environment:
+      - discovery.type=single-node
+      - XPACK_SECURITY_ENABLED=false
+      - XPACK_REPORTING_ENABLED=false
+      - XPACK_MONITORING_ENABLED=false
 networks:
   bridge:
     external:
