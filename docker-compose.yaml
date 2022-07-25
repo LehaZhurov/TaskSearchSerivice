@@ -1,0 +1,36 @@
+version: '3'
+services:
+  app:
+      build: ./docker/app/
+      container_name: searchservice_app
+      volumes:
+          - ./:/usr/share/nginx/www
+      working_dir: /usr/share/nginx/www
+      networks:
+        bridge:
+          aliases:
+          - searchservice_app
+  nginx:
+      build: ./docker/nginx
+      container_name: searchservice
+      links:
+          - app
+      volumes_from:
+          - app
+      ports:
+          - 81:80
+      networks:
+        bridge:
+          aliases:
+          - searchservice
+  elasticsearch:
+      container_name: elastic_searchservice
+      image: elasticsearch:6.4.0 
+      networks:
+        bridge:
+          aliases:
+          - elastic_searchservice
+networks:
+  bridge:
+    external:
+      name: app_bridge
